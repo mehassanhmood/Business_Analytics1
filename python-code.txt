@@ -1,0 +1,19 @@
+SCRIPT_REAL("
+    import pandas as pd
+
+    # Creating a DataFrame from the inputs provided by Tableau
+    data = {'Net_Income': _arg1, 'Gross_Profit': _arg2}
+    df = pd.DataFrame(data)
+
+    # Assuming 'Net_Income' and 'Gross_Profit' are columns in your dataset
+    net_income = df['Net_Income'].astype(float)
+    gross_profit = df['Gross_Profit'].astype(float)
+
+    # Calculate the desired formula
+    result = (net_income - net_income.shift(1)) / abs(gross_profit.shift(1))
+
+    # Replace NaN with 0 (to handle the first row)
+    result = result.fillna(0)
+
+    return result.values.tolist()
+", SUM([Net Income]), SUM([Gross Profit]))
